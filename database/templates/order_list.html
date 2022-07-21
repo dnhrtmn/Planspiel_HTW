@@ -1,0 +1,58 @@
+{% extends "home.html" %}
+{% load i18n %}
+{% load static %}
+{% block test %}
+
+{# Anzeige um die Reservierungen nach Räumen zu filtern #}
+<div class="m-2">
+    <form method="GET">
+        {{ filter.form.as_p }}
+        <div class="m-2"><button type="submit" , class="btn btn-sm btn-outline-primary">Filtern</button>
+        </div>
+    </form>
+</div>
+
+<div class="m-2"><a class="btn btn-sm btn-outline-primary" href="{% url 'order_create' %}">Bestellung erstellen</a>
+</div>
+
+
+
+{# Anzeige der Reservierungen als Kachel #}
+<div class="row">
+    {{ context }}
+    {% for object in orderData %}
+
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+                <title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em"> {{
+                    object }}</text>
+            </svg>
+            <div class="card-body">
+                <p class="card-text">{{ object.orderNumber }}</p>
+                <p class="card-text">Anzahl: {{ object.quantity }}</p>
+                <p class="card-text">Farbe: {{ object.color }}</p>
+                <p class="card-text">Schraube: {{ object.screw }}</p>
+                <p class="card-text">Status: {{ object.orderStatus }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ object.get_absolute_url }}">Ansehen</a>
+                        {% if user.is_staff %}
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ object.get_update_url }}">Bearbeiten</a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <li>Keine Reservierungen vorhanden.</li>
+
+    {% endfor %}
+</div>
+
+{% endblock %}

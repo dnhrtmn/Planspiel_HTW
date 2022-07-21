@@ -1,0 +1,68 @@
+{% extends "home.html" %}
+{% load i18n %}
+{% load template_extras %}
+{% block test %}
+{% if user.is_authenticated %}
+<div class="btn-group-vertical">
+    <!-- <a href="{% url 'order_create' %}">Create Order</a> -->
+    {# Zeigt dem User seine Mail Adresse an und eine Option seine Nutzerdaten anzusehen und zu ändern. #}
+    {% for object in userObject %}
+    {% if object == user %}
+    <a>User: {{ object }}</a>
+    <a class="btn btn-outline-secondary" href="{{ object.get_update_url }}">{% trans 'Userdaten ansehen' %}</a>
+    {% endif %}
+    {% endfor %}
+
+
+
+
+
+</div>
+
+<div class="btn-group-vertical">
+    {# Wenn User = Station -> Zeigt dem User seine aktuellen Aufträge an #}
+    {% if request.user|has_group:"stationen" %}
+    <h4>{% trans 'Ihre aktuellen Aufträge an Station XX:' %}</h4>
+    <table class="table">
+        <tr>
+            <th>{% trans 'Betreff' %}</th>
+        </tr>
+        {% for object in orderData %}
+        <tr>
+            <td>Auftrag: {{ object.orderNumber }}</td>
+            <td>Anzahl: {{ object.quantity }}</td>
+            <td><a href="{{ object.get_update_url }}">Auftrag ansehen</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td>{% trans 'Sie haben derzeit keine offenen Anfragen.' %}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+
+    {% elif request.user|has_group:"kunden" %}
+    <table class="table">
+        {# Wenn User = Kunde -> Zeigt dem User seine aktuellen Aufträge an #}
+        <h4>{% trans 'Ihre aktuellen Bestellungen:' %}</h4>
+        <tr>
+            <th>{% trans 'Betreff' %}</th>
+        </tr>
+        {% for object in customerOrder %}
+        <tr>
+            <td>Auftrag: {{ object.orderNumber }}</td>
+            <td>Anzahl: {{ object.quantity }}</td>
+            <td><a href="{{ object.get_update_url }}">Auftrag ansehen</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td>{% trans 'Sie haben derzeit keine offenen Anfragen.' %}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

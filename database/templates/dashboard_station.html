@@ -1,0 +1,46 @@
+{% extends "home.html" %}
+{% load i18n %}
+{% load template_extras %}
+
+{% block test %}
+<div class="btn-group-vertical">
+    {# Wenn User = Station -> Zeigt dem User seine aktuellen Aufträge an #}
+    {% if request.user|has_group:"stationen" %}
+    <h4>{% trans 'Ihre aktuellen Aufträge an Station XX:' %}</h4>
+    <table class="table">
+        <tr>
+            <th>{% trans 'Betreff' %}</th>
+        </tr>
+        {% for object in orderData %}
+        <tr>
+            <td>Auftrag: {{ object.orderNumber }}</td>
+            <td>Anzahl: {{ object.quantity }}</td>
+            <td><a href="{{ object.get_update_url }}">Auftrag ansehen</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td>{% trans 'Sie haben derzeit keine offenen Anfragen.' %}</td>
+        </tr>
+        {% endfor %}
+        {% elif request.user|has_group:"kunden" %}
+        {# Wenn User = Kunde -> Zeigt dem User seine aktuellen Aufträge an #}
+        <h4>{% trans 'Ihre aktuellen Bestellungen:' %}</h4>
+        <tr>
+            <th>{% trans 'Betreff' %}</th>
+        </tr>
+        {% for object in customerOrder %}
+        <tr>
+            <td>Auftrag: {{ object.orderNumber }}</td>
+            <td>Anzahl: {{ object.quantity }}</td>
+            <td><a href="{{ object.get_update_url }}">Auftrag ansehen</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td>{% trans 'Sie haben derzeit keine offenen Anfragen.' %}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+
+{% endblock %}

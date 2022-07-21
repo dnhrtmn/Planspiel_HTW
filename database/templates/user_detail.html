@@ -1,0 +1,47 @@
+{% extends "home.html" %}
+{% load i18n %}
+
+{% block test %}
+<form action="" method="post">
+    {% csrf_token %}
+    <div>
+
+
+        <a class="btn btn-outline-primary" href="{% url 'change_password' %}">Passwort ändern</a>
+        {# <div class="form-group row">#}
+            {# <label class="col-sm-2 col-form-label" for="id_email">Email Adresse: </label>#}
+            {# <input class="form-control col-sm-10" id="id_email" type="text" name="email" value="{{ object.email }}"
+                disabled>#}
+            {# </div>#}
+        {# <div class="form-group row">#}
+            {# <label class="col-sm-2 col-form-label" for="id_first_name">Vorname: </label>#}
+            {# <input class="form-control col-sm-10" id="id_first_name" type="text" name="first_name"
+                value="{{ object.first_name }}" disabled>#}
+            {# </div>#}
+        {# <div class="form-group row">#}
+            {# <label class="col-sm-2 col-form-label" for="last_name">Nachname: </label>#}
+            {# <input class="form-control col-sm-10" id="last_name" type="text" name="last_name"
+                value="{{ object.last_name }}" disabled>#}
+            {# </div>#}
+        {# <div class="form-group row">#}
+            {# <label class="col-sm-2 col-form-label" for="id_postalcode">Postleitzahl: </label>#}
+            {# <input class="form-control col-sm-10" id="id_postalcode" type="number" name="postalcode"
+                value="{{ object.postalcode }}">#}
+            {# </div>#}
+        {# <div class="form-group row">#}
+            {# <label class="col-sm-2 col-form-label" for="id_city">Stadt: </label>#}
+            {# <input class="form-control col-sm-10" id="id_city" type="text" name="city" value="{{ object.city }}">#}
+            {# </div>#}
+        {# <div class="form-group row">#}
+            {# <label class="col-sm-2 col-form-label" for="id_adress">Straße: </label>#}
+            {# <input class="form-control col-sm-10" id="id_adress" type="text" name="adress"
+                value="{{ object.adress }}">#}
+            {# </div>#}
+        {{ form.as_p }}
+
+
+        <input type="submit" class="btn btn-outline-primary" value="Update">
+    </div>
+</form>
+<caption>{% trans 'Für das Ändern der gesperrten Felder wenden Sie sich bitte an den Studierendenservice' %}</caption>
+{% endblock %}
