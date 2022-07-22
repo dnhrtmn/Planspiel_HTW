@@ -4,32 +4,39 @@
 {% block test %}
 
 {# Anzeige um die Reservierungen nach Räumen zu filtern #}
-<div class="m-2">
-    <form method="GET">
-        {{ filter.form.as_p }}
-        <div class="m-2"><button type="submit" , class="btn btn-sm btn-outline-primary">Filtern</button>
+
+<p>
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+        aria-controls="collapseExample">
+        Filter
+    </a>
+    <a class="btn btn-outline-primary" href="{% url 'order_create' %}">Bestellung erstellen</a>
+
+</p>
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        <div class="m-2">
+            <form method="GET">
+                {{ filter.form.as_p }}
+                <div class="m-2"><button type="submit" , class="btn btn-sm btn-outline-primary">Filtern</button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
-
-<div class="m-2"><a class="btn btn-sm btn-outline-primary" href="{% url 'order_create' %}">Bestellung erstellen</a>
-</div>
-
-
 
 {# Anzeige der Reservierungen als Kachel #}
 <div class="row">
-    {{ context }}
-    {% for object in qualityData %}
+    <!-- Gibt nur die gefilterten Objekte in einem QuerySet(qs) aus -->
+    {% for object in filter.qs %}
 
     <div class="col-md-4">
         <div class="card mb-4 shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
+            <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em"> {{
-                    object }}</text>
-            </svg>
+                <title></title>
+                <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
+            </svg> -->
             <div class="card-body">
                 <p class="card-text">Auftragsnummer: {{ object.orderNumber }}</p>
                 <p class="card-text">Meldung: {{ object.quality }}</p>

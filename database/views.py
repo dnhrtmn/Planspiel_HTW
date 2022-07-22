@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login
+from .filters import *
 
 from . import forms
 from . import models
@@ -73,6 +74,8 @@ class orderListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         orderData = models.OrderData.objects.all()
         #orderStatus = models.OrderStatus.objects.filter(orderStation=station)
+        context['filter'] = orderFilter(
+            self.request.GET, queryset=self.get_queryset())
         context['orderData'] = orderData
         #context['orderStatus'] = orderStatus
         return context
@@ -86,6 +89,8 @@ class qualityListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         qualityData = models.QualityData.objects.all()
         context['qualityData'] = qualityData
+        context['filter'] = qualityFilter(
+            self.request.GET, queryset=self.get_queryset())
         return context
 
 
