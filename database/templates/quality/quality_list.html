@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load static %}
 {% block test %}
+{% load template_extras %}
+
 
 {# Anzeige um die Reservierungen nach Räumen zu filtern #}
 
@@ -49,6 +51,8 @@
                         <a class="btn btn-sm btn-outline-secondary" href="{{ object.get_absolute_url }}">Ansehen</a>
                         {% if user.is_staff %}
                         <a class="btn btn-sm btn-outline-secondary" href="{{ object.get_update_url }}">Bearbeiten</a>
+                        {% elif request.user|has_group:"quality"%}
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ object.get_update_url }}">Test</a>
                         {% endif %}
                     </div>
 

@@ -38,14 +38,17 @@ class orderForm(forms.ModelForm):
 class qualityForm(forms.ModelForm):
     class Meta:
         model = QualityData
+
         fields = [
             'orderNumber',
-            'quality',
-            'qualityDate',
-            'qualityStatus',
-            'qualityComment',
+            'orderPart',
+            'failure',
+            'failureStation'
+
+
             # 'orderPart'
         ]
+        widgets = {'failureStation': forms.HiddenInput()}
 
         def __init__(self, *args, **kwargs):
             super(qualityForm, self).__init__(*args, **kwargs)

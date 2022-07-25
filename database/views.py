@@ -83,7 +83,7 @@ class orderListView(generic.ListView):
 
 class qualityListView(generic.ListView):
     model = models.QualityData
-    template_name = "quality_list.html"
+    template_name = "quality/quality_list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -215,7 +215,7 @@ def startOrder(request, pk, part):
 
 def createQualityMsg(request, pk, part):
     form = forms.qualityForm(
-        initial={'orderNumber': pk, 'orderPart': part, 'qualityDate': datetime.datetime.now()})
+        initial={'orderNumber': pk, 'orderPart': part})
     if request.method == "POST":
         form = forms.qualityForm(request.POST)
         if form.is_valid():
@@ -224,4 +224,4 @@ def createQualityMsg(request, pk, part):
             instance.save()
             return redirect('/')
     context = {'form': form}
-    return render(request, 'quality_form.html', context)
+    return render(request, 'quality/quality_form.html', context)

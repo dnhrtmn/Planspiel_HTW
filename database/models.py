@@ -178,10 +178,33 @@ class OrderStatus(models.Model):
 class QualityData(models.Model):
     orderNumber = models.ForeignKey(OrderData, on_delete=models.CASCADE)
     orderPart = models.CharField(max_length=10)
-    quality = models.CharField(max_length=80)
-    qualityDate = models.DateTimeField(blank=True, null=True)
-    qualityStatus = models.CharField(max_length=10)
-    qualityComment = models.CharField(max_length=80)
+    failure = models.CharField(max_length=80)
+    failureStation = models.CharField(max_length=80)
+    qualityDate = models.DateTimeField(
+        blank=True, null=True, auto_now_add=True)
+    reworkBeginn = models.DateTimeField(blank=True, null=True)
+    reworkEnd = models.DateTimeField(blank=True, null=True)
+    comment = models.CharField(max_length=80, blank=True, null=True)
+
+
+# class QualityStatus(models.Model):
+#     qualityCase = models.ForeignKey(QualityData, on_delete=models.CASCADE)
+#     timeBeginn = models.DateTimeField(blank=True, null=True)
+#     timeEnd = models.DateTimeField(blank=True, null=True)
+#     station = models.CharField(max_length=30)
+#     qualityStatus_CHOICES = [
+#         ('NEW', 'Auf dem Weg zur Qualitätskontrolle'),
+#         ('PROCESSING', 'In Prüfung'),
+#         ('1', 'zurück zu Station 1'),
+#         ('2', 'zurück zu Station 2'),
+#         ('3', 'zurück zu Station 3'),
+#         ('4', 'zurück zu Station 4'),
+#         ('5', 'zurück zu Station 5'),
+#         ('6', 'zurück zu Station 6'),
+#         ('FINISHED', 'Abgeschlossen')
+#     ]
+#     qualityStatus = models.CharField(
+#         choices=qualityStatus_CHOICES, default='NEW', max_length=20)
 
 
 class Stations(models.Model):
