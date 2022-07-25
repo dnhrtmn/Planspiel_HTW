@@ -1,4 +1,5 @@
 from datetime import date, datetime
+import imp
 from django.db import models
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -8,6 +9,7 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser, User)
 from django.conf import settings
 import uuid
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Customer(models.Model):
@@ -37,7 +39,8 @@ class Customer(models.Model):
 
 class OrderData(models.Model):
     orderNumber = models.CharField(max_length=80, default=-1)
-    quantity = models.IntegerField()
+    quantity = models.PositiveIntegerField(
+        default=1, validators=[MinValueValidator(1), MaxValueValidator(3)])
     color_CHOICES = [
         ("red", 'Rot'),
         ("yellow", 'Gelb'),

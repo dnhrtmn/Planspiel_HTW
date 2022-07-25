@@ -15,7 +15,7 @@
         <tr>
             <td>Auftrag: {{ object.orderNumber }}</td>
             <td>Anzahl: {{ object.quantity }}</td>
-            <td><a href="{{ object.get_update_url }}">Auftrag ansehen</a></td>
+            <td><a href="{% url 'orderStatus_list' object.id %}">Auftrag ansehen</a></td>
         </tr>
         {% empty %}
         <tr>

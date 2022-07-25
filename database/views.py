@@ -197,7 +197,7 @@ def startOrder(request, pk, part):
         elif orderState.orderStatus == "PROCESSING":
             print(3)
             print("COUNT", models.Stations.objects.all().count())
-            breakpoint()
+            # breakpoint()
             if orderState.orderStation == models.Stations.objects.all().count():
                 print(4)
                 if models.OrderStatus.objects.filter(orderStatus='PROCESSING').count() == 1:

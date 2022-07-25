@@ -48,9 +48,16 @@
                         bearbeiten</a>
                     {% endif %}
 
+                    {% if object.orderStatus == 'NEW' %}
                     <a class="btn btn-sm btn-outline-info"
                         href="{% url 'order_start' object.orderNumber.id object.id %}">Auftragsbearbeitung
                         starten</a>
+                    {% elif object.orderStatus == 'PROCESSING'%}
+                    <a class="btn btn-sm btn-outline-info"
+                        href="{% url 'order_start' object.orderNumber.id object.id %}">Auftragsbearbeitung
+                        beenden</a>
+
+                    {% endif %}
 
 
                     <!-- </div> -->
