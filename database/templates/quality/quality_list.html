@@ -40,11 +40,11 @@
                 <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
             </svg> -->
             <div class="card-body">
-                <p class="card-text">Auftragsnummer: {{ object.orderNumber }}</p>
-                <p class="card-text">Meldung: {{ object.quality }}</p>
+                <p class="card-text">Auftragsnummer: {{ object.orderNumber.orderNumber }}</p>
+                <p class="card-text">Meldung: {{ object.failure }}</p>
                 <p class="card-text">Zeitpunkt: {{ object.qualityDate }}</p>
-                <p class="card-text">Status: {{ object.qualityStatus }}</p>
-                <p class="card-text">Meldung an Station: {{ object.qualityComment }}</p>
+                <p class="card-text">Status: {{ object.comment }}</p>
+                <p class="card-text">Fehler an Station: {{ object.failureStation }}</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
 
@@ -52,7 +52,19 @@
                         {% if user.is_staff %}
                         <a class="btn btn-sm btn-outline-secondary" href="{{ object.get_update_url }}">Bearbeiten</a>
                         {% elif request.user|has_group:"quality"%}
-                        <a class="btn btn-sm btn-outline-secondary" href="{{ object.get_update_url }}">Test</a>
+                        <a class="btn btn-sm btn-outline-success"
+                            href="{% url 'quality_process' object.id 'checkBeginn' %}">Prüfung
+                            starten</a>
+                        <a class="btn btn-sm btn-outline-secondary"
+                            href="{% url 'quality_process' object.id 'checkEnd' %}">Prüfung beenden
+                            beenden</a>
+                        {% elif request.user|has_group:"stationen"%}
+                        <a class="btn btn-sm btn-outline-success"
+                            href="{% url 'quality_process' object.id 'reworkBeginn' %}">Nacharbeit
+                            starten</a>
+                        <a class="btn btn-sm btn-outline-secondary"
+                            href="{% url 'quality_process' object.id 'reworkEnd' %}">Nacharbeit
+                            beenden</a>
                         {% endif %}
                     </div>
 

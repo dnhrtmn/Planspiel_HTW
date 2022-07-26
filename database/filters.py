@@ -30,4 +30,4 @@ class orderFilter(django_filters.FilterSet):
 class qualityFilter(django_filters.FilterSet):
     class Meta:
         model = QualityData
-        fields = ('orderNumber',)
+        fields = ('orderNumber', 'failureStation')

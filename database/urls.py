@@ -28,6 +28,12 @@ urlpatterns = [
     path("api/v1/", include(router.urls)),
     path("order/quality/create/<int:pk>/<int:part>",
          views.createQualityMsg, name="quality_create"),
-    path("order/quality/list", views.qualityListView.as_view(), name="quality_list")
+    path("order/quality/detail/<int:pk>/<int:part>",
+         views.qualityDetailView.as_view(), name="quality_detail"),
+    path("order/quality/update/<int:pk>/<int:part>",
+         views.qualityUpdateView.as_view(), name="quality_update"),
+    path("order/quality/list", views.qualityListView.as_view(), name="quality_list"),
+    path("order/quality/process/<int:pk>/<str:state>",
+         views.qualityProcess, name="quality_process")
 
 ]

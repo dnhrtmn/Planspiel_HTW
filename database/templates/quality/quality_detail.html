@@ -1,0 +1,63 @@
+{% extends "home.html" %}
+{% load static %}
+{% block test %}
+{% load i18n %}
+
+<p>
+    <a class="btn btn-sm btn-outline-primary" href="{% url 'index' %}">
+
+        {% trans 'Zurück zur Reservierungsübersicht' %}
+    </a>
+</p>
+{# Tabelle zur Darstellung der vorher ausgewählten Reservierung #}
+<table class="table">
+    <tr>
+        <td>{% trans 'Auftrag' %}</td>
+        <td>{{ object.orderNumber.orderNumber }}</td>
+    </tr>
+    <tr>
+        <td>{% trans 'Fehler:' %}</td>
+        <td>{{ object.failure }}</td>
+    </tr>
+    <tr>
+        <td>{% trans 'Anzahl' %}</td>
+        <td>Block {{ object.quantity }}</td>
+    </tr>
+    <tr>
+        <td>{% trans 'Farbe' %}</td>
+        <td>{{ object.color }}</td>
+    </tr>
+
+    <tr>
+        <td>{% trans 'Schraube:' %}</td>
+        <td>{{ object.screw }}</td>
+    </tr>
+
+
+</table>
+<div class="row">
+    {# Wenn der User ein Admin ist, bekommt er einen Button um die Reservierung zu bearbeiten. Jeder User bekommt #}
+    {# den Button zur Stornierung der Reservierung angezeigt. #}
+    {% if user.is_staff %}
+    <a class="btn btn-sm btn-outline-primary" href="{{object.get_update_url}}">{% trans 'Auftrag bearbeiten' %}</a>
+    {% endif %}
+    <div>
+        {% if user.groups.all.0.name == 'stationen' %}
+        {% if object.orderStatus == "NEW" %}
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'order_start' object.id %}">Bearbeitung
+            starten</a>
+        {% elif object.orderStatus == "PROCESSING" %}
+        {# Momentan wird nur das Gesamtauftragsstatus angezeigt, was darin resultiert, dass immer nur Bearbeitung
+        beenden angezeigt wird #}
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'order_start' object.id %}">{% trans 'Bearbeitung
+            beenden'
+            %}</a>
+        {% endif %}
+        {% endif %}
+    </div>
+
+
+</div>
+
+
+{% endblock %}

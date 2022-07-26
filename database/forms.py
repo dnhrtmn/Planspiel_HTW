@@ -48,7 +48,7 @@ class qualityForm(forms.ModelForm):
 
             # 'orderPart'
         ]
-        widgets = {'failureStation': forms.HiddenInput()}
+        # widgets = {'failureStation': forms.HiddenInput()}
 
         def __init__(self, *args, **kwargs):
             super(qualityForm, self).__init__(*args, **kwargs)

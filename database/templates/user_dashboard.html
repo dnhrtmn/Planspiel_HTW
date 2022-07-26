@@ -22,47 +22,144 @@
 <div class="btn-group-vertical">
     {# Wenn User = Station -> Zeigt dem User seine aktuellen Aufträge an #}
     {% if request.user|has_group:"stationen" %}
-    <h4>{% trans 'Ihre aktuellen Aufträge an Station XX:' %}</h4>
-    <table class="table">
-        <tr>
-            <th>{% trans 'Betreff' %}</th>
-        </tr>
-        {% for object in orderData %}
-        <tr>
-            <td>Auftrag: {{ object.orderNumber }}</td>
-            <td>Anzahl: {{ object.quantity }}</td>
-            <td><a href="{% url 'orderStatus_list' object.id %}">Auftrag ansehen</a></td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td>{% trans 'Sie haben derzeit keine offenen Anfragen.' %}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="col-xs-6">
+        <h4 class="sub-header">{% trans 'Ihre aktuellen Aufträge an Station XX:' %}</h4>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>{% trans 'Auftragsnummer' %}</th>
+                    <th>{% trans 'Anzahl' %}</th>
+                </tr>
+                {% for object in orderData %}
+                <tr>
+                    <td>{{ object.orderNumber }}</td>
+                    <td>{{ object.quantity }}</td>
+                    <td><a href="{% url 'orderStatus_list' object.id %}">Auftrag ansehen</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>{% trans 'Sie haben derzeit keine offenen Anfragen.' %}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="col-xs-6">
+        <h4 class="sub-header">Qualitätsmeldungen</h4>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="col-md-4">Auftrag</th>
+                        <th class="col-md-1">Teil</th>
+                        <th class="col-md-4">Station</th>
+                        <th class="col-md-4">Fehler</th>
+                        <th class="col-md-4">Kommentar/Status</th>
+                        <th class="col-md-4">Fehlerzeitpunkt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for object in qualityData %}
+                    <tr>
+                        <th class="col-md-1">{{ object.orderNumber.orderNumber}}</th>
+                        <th class="col-md-1">{{ object.orderPart}}</th>
+                        <td class="col-md-1">{{ object.failureStation}}</td>
+                        <td class="col-md-1">{{ object.failure}}</td>
+                        <td class="col-md-1">{{ object.comment}}</td>
+                        <td class="col-md-1">{{ object.qualityDate}}</td>
+                        <td><a class="btn btn-sm btn-outline-success"
+                                href="{% url 'quality_process' object.id 'reworkBeginn' %}">Nacharbeit
+                                starten</a></td>
+                        <td><a class="btn btn-sm btn-outline-secondary"
+                                href="{% url 'quality_process' object.id 'reworkEnd' %}">Nacharbeit
+                                beenden</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td>{% trans 'Sie haben derzeit keine Qualitätsmeldungen.' %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+</div>
 
 
 
 
-    {% elif request.user|has_group:"kunden" %}
-    <table class="table">
-        {# Wenn User = Kunde -> Zeigt dem User seine aktuellen Aufträge an #}
-        <h4>{% trans 'Ihre aktuellen Bestellungen:' %}</h4>
-        <tr>
-            <th>{% trans 'Betreff' %}</th>
-        </tr>
-        {% for object in customerOrder %}
-        <tr>
-            <td>Auftrag: {{ object.orderNumber }}</td>
-            <td>Anzahl: {{ object.quantity }}</td>
-            <td><a href="{{ object.get_update_url }}">Auftrag ansehen</a></td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td>{% trans 'Sie haben derzeit keine offenen Anfragen.' %}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
+
+{% elif request.user|has_group:"kunden" %}
+<table class="table">
+    {# Wenn User = Kunde -> Zeigt dem User seine aktuellen Aufträge an #}
+    <h4>{% trans 'Ihre aktuellen Bestellungen:' %}</h4>
+    <tr>
+        <th>{% trans 'Betreff' %}</th>
+    </tr>
+    {% for object in customerOrder %}
+    <tr>
+        <td>Auftrag: {{ object.orderNumber }}</td>
+        <td>Anzahl: {{ object.quantity }}</td>
+        <td><a href="{{ object.get_update_url }}">Auftrag ansehen</a></td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td>{% trans 'Sie haben derzeit keine offenen Anfragen.' %}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+{% elif request.user|has_group:"quality" %}
+<div class="col-xs-6">
+    <h4 class="sub-header">Qualitätsmeldungen</h4>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="col-md-4">Auftrag</th>
+                    <th class="col-md-4">Station</th>
+                    <th class="col-md-4">Fehler</th>
+                    <th class="col-md-4">Kommentar/Status</th>
+                    <th class="col-md-4">Fehlerzeitpunkt</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for object in qualityData %}
+                <tr>
+                    <th class="col-md-1">{{ object.orderNumber.orderNumber}}</th>
+                    <td class="col-md-1">{{ object.failureStation}}</td>
+                    <td class="col-md-1">{{ object.failure}}</td>
+                    <td class="col-md-1">{{ object.comment}}</td>
+                    <td class="col-md-1">{{ object.qualityDate}}</td>
+
+
+                    <td><a class="btn btn-sm btn-outline-success"
+                            href="{% url 'quality_process' object.id 'checkBeginn'%}">Prüfung
+                            starten</a></td>
+                    <td><a class="btn btn-sm btn-outline-secondary"
+                            href="{% url 'quality_process' object.id 'checkEnd' %}">Prüfung
+                            beenden</a></td>
+                    <td><a class="btn btn-sm btn-outline-secondary" href="{{ object.get_update_url }}">Bearbeiten</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>{% trans 'Sie haben derzeit keine Qualitätsmeldungen.' %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
 </div>
 {% endif %}
 {% endblock %}

@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import Group
 from .filters import *
 
 from . import forms
@@ -37,18 +38,22 @@ class user_dashboard(TemplateView):
     template_name = "user_dashboard.html"
 
     def get_context_data(self, **kwargs):
+        context = super(user_dashboard, self).get_context_data(**kwargs)
         if self.request.user.groups.filter(name="stationen").exists():
-            context = super(user_dashboard, self).get_context_data(**kwargs)
+
             # if self.request.user.is_authenticated:
             #     station = int(self.request.user.username[-1:])
 
             orderData = models.OrderData.objects.all()
+            qualityData = models.QualityData.objects.filter(
+                failureStation=self.request.user.username[-1:])
             #orderStatus = models.OrderStatus.objects.filter(orderStation=station)
             context['orderData'] = orderData
+            context['qualityData'] = qualityData
             #context['orderStatus'] = orderStatus
             return context
         elif self.request.user.groups.filter(name="kunden").exists():
-            context = super(user_dashboard, self).get_context_data(**kwargs)
+
             # if self.request.user.is_authenticated:
             #     station = int(self.request.user.username[-1:])
 
@@ -56,6 +61,12 @@ class user_dashboard(TemplateView):
             #orderStatus = models.OrderStatus.objects.filter(orderStation=station)
             context['customerOrder'] = orderData
             #context['orderStatus'] = orderStatus
+            return context
+        else:
+            orderData = models.OrderData.objects.all()
+            qualityData = models.QualityData.objects.all()
+            context['orderData'] = orderData
+            context['qualityData'] = qualityData
             return context
 
 
@@ -86,9 +97,24 @@ class qualityListView(generic.ListView):
     template_name = "quality/quality_list.html"
 
     def get_context_data(self, **kwargs):
+        user = self.request.user
+        username = user.username[-1:]
+
         context = super().get_context_data(**kwargs)
-        qualityData = models.QualityData.objects.all()
-        context['qualityData'] = qualityData
+        # # group = Group.objects.get(name="station")
+        # if Group.objects.get(name="stationen") in user.groups.all():
+        #     # qualityData = models.QualityData.objects.filter(
+        #     #     failureStation=username)
+        #     self.request.GET['failureStation'] = username
+        #     context['filter'] = qualityFilter(
+        #         self.request.GET, queryset=self.get_queryset())
+        # else:
+        #     # qualityData = models.QualityData.objects.all()
+
+        #     # context['qualityData'] = qualityData
+        #     # print(self.request.GET['failureStation'])
+        #     # print(self.get_queryset())
+
         context['filter'] = qualityFilter(
             self.request.GET, queryset=self.get_queryset())
         return context
@@ -225,3 +251,44 @@ def createQualityMsg(request, pk, part):
             return redirect('/')
     context = {'form': form}
     return render(request, 'quality/quality_form.html', context)
+
+# View zur Detailansicht einer Bestellung
+
+
+class qualityDetailView(generic.DetailView):
+    model = models.QualityData
+    template_name = "quality/quality_detail.html"
+    form_class = forms.qualityForm
+    pk_url_kwarg = "pk"
+
+
+# View zum Updaten der Bestellung
+class qualityUpdateView(generic.UpdateView):
+    model = models.QualityData
+    template_name = "quality/quality_form.html"
+    form_class = forms.qualityForm
+    pk_url_kwarg = "pk"
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+
+def qualityProcess(request, pk, state):
+    # return redirect('order/status/' + str(pk))
+    if state == "checkBeginn":
+        object = models.QualityData.objects.filter(
+            pk=pk).values()
+        object = object[0]['orderPart']
+        models.QualityData.objects.filter(
+            pk=pk).update(checkBeginn=datetime.datetime.now(), comment="In Prüfung")
+        return redirect('quality_update', pk=pk, part=object)
+    elif state == "checkEnd":
+        models.QualityData.objects.filter(
+            pk=pk).update(checkEnd=datetime.datetime.now(), comment="Prüfung beendet")
+    elif state == "reworkBeginn":
+        models.QualityData.objects.filter(
+            pk=pk).update(reworkBeginn=datetime.datetime.now(), comment="In Nacharbeit")
+    elif state == "reworkEnd":
+        models.QualityData.objects.filter(
+            pk=pk).update(reworkEnd=datetime.datetime.now(), comment="Nacharbeit beendet")
+    return redirect('quality_list')

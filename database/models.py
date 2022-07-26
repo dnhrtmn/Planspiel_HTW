@@ -179,12 +179,20 @@ class QualityData(models.Model):
     orderNumber = models.ForeignKey(OrderData, on_delete=models.CASCADE)
     orderPart = models.CharField(max_length=10)
     failure = models.CharField(max_length=80)
-    failureStation = models.CharField(max_length=80)
+    failureStation = models.CharField(max_length=80, blank=True)
     qualityDate = models.DateTimeField(
         blank=True, null=True, auto_now_add=True)
+    checkBeginn = models.DateTimeField(blank=True, null=True)
+    checkEnd = models.DateTimeField(blank=True, null=True)
     reworkBeginn = models.DateTimeField(blank=True, null=True)
     reworkEnd = models.DateTimeField(blank=True, null=True)
     comment = models.CharField(max_length=80, blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse("quality_detail", args=(self.pk, self.orderPart))
+
+    def get_update_url(self):
+        return reverse("quality_update", args=(self.pk, self.orderPart))
 
 
 # class QualityStatus(models.Model):
