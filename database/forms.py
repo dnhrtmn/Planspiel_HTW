@@ -23,9 +23,9 @@ class orderForm(forms.ModelForm):
 
         fields = [
             'quantity',
-            'color',
-            'screw',
-            'customer',
+            # 'color',
+            # 'screw',
+            # 'customer',
             'orderStatus'
 
         ]

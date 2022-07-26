@@ -44,7 +44,7 @@ class user_dashboard(TemplateView):
             # if self.request.user.is_authenticated:
             #     station = int(self.request.user.username[-1:])
 
-            orderData = models.OrderData.objects.all()
+            orderData = models.OrderData.objects.filter(active=True)
             qualityData = models.QualityData.objects.filter(
                 failureStation=self.request.user.username[-1:])
             #orderStatus = models.OrderStatus.objects.filter(orderStation=station)

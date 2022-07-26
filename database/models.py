@@ -40,27 +40,28 @@ class Customer(models.Model):
 class OrderData(models.Model):
     orderNumber = models.CharField(max_length=80, default=-1)
     quantity = models.PositiveIntegerField(
-        default=1, validators=[MinValueValidator(1), MaxValueValidator(3)])
-    color_CHOICES = [
-        ("red", 'Rot'),
-        ("yellow", 'Gelb'),
-        ("blue", 'Blau'),
-        ("green", 'Grün'),
-    ]
-    color = models.CharField(
-        max_length=10,
-        choices=color_CHOICES,
-        default="red",
-    )
-    screw_CHOICES = [
-        ("round", 'Rund'),
-        ("hexagon", 'Sechskant'),
-    ]
-    screw = models.CharField(
-        max_length=10,
-        choices=screw_CHOICES,
-        default="round",
-    )
+        default=1, validators=[MinValueValidator(1), MaxValueValidator(2)])
+    # color_CHOICES = [
+    #     ("red", 'Rot'),
+    #     ("yellow", 'Gelb'),
+    #     ("blue", 'Blau'),
+    #     ("green", 'Grün'),
+    # ]
+    # color = models.CharField(
+    #     max_length=10,
+    #     choices=color_CHOICES,
+    #     default="red",
+    # )
+    # screw_CHOICES = [
+    #     ("round", 'Rund'),
+    #     ("hexagon", 'Sechskant'),
+    # ]
+    # screw = models.CharField(
+    #     max_length=10,
+    #     choices=screw_CHOICES,
+    #     default="round",
+    # )
+    active = models.BooleanField(default=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, default=1)
     orderStatus_CHOICES = [
         ("NEW", 'Neu'),
@@ -166,6 +167,26 @@ class OrderStatus(models.Model):
     orderStation = models.IntegerField(
         choices=orderStation_CHOICES,
         default=1,
+    )
+    color_CHOICES = [
+        ("red", 'Rot'),
+        ("yellow", 'Gelb'),
+        ("blue", 'Blau'),
+        ("green", 'Grün'),
+    ]
+    color = models.CharField(
+        max_length=10,
+        choices=color_CHOICES,
+        default="red",
+    )
+    screw_CHOICES = [
+        ("round", 'Rund'),
+        ("hexagon", 'Sechskant'),
+    ]
+    screw = models.CharField(
+        max_length=10,
+        choices=screw_CHOICES,
+        default="round",
     )
     orderPart = models.CharField(max_length=10)
     timeBeginn = models.DateTimeField(blank=True, null=True)
