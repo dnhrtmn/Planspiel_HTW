@@ -26,7 +26,8 @@ class orderForm(forms.ModelForm):
             # 'color',
             # 'screw',
             # 'customer',
-            'orderStatus'
+            'orderStatus',
+            'active'
 
         ]
 

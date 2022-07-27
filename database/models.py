@@ -40,7 +40,7 @@ class Customer(models.Model):
 class OrderData(models.Model):
     orderNumber = models.CharField(max_length=80, default=-1)
     quantity = models.PositiveIntegerField(
-        default=1, validators=[MinValueValidator(1), MaxValueValidator(2)])
+        default=2, validators=[MinValueValidator(1), MaxValueValidator(2)])
     # color_CHOICES = [
     #     ("red", 'Rot'),
     #     ("yellow", 'Gelb'),
@@ -70,8 +70,9 @@ class OrderData(models.Model):
     ]
     orderStatus = models.CharField(
         max_length=10, choices=orderStatus_CHOICES, default="NEW")
-    orderDate = models.DateTimeField(blank=True, null=True)
-    orderTime = models.TimeField(blank=True, null=True)
+    orderDate = models.DateTimeField(
+        blank=True, null=True, default=datetime.now())
+    orderTime = models.TimeField(blank=True, null=True, default=timezone.now)
 
     class Meta:
         pass
@@ -123,7 +124,7 @@ class OrderData(models.Model):
                 self.orderTime = datetime.now()
                 self.orderDate = datetime.now()
                 return super(OrderData, self).save(*args, **kw)
-            return super(OrderData, self).save(*args, **kw)
+        return super(OrderData, self).save(*args, **kw)
 
     def publish(self, request):
         self.save()

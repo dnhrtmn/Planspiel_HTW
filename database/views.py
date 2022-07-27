@@ -232,6 +232,7 @@ def startOrder(request, pk, part):
                     models.OrderStatus.objects.filter(orderNumber=pk).filter(id=part).update(
                         orderStatus="FINISHED", timeEnd=datetime.datetime.now())
                     return redirect('/order/status/' + str(pk))
+                # TODO: RETURN FEHLT IN ELSE!
             else:
                 print(5)
                 models.OrderStatus.objects.filter(orderNumber=pk).filter(id=part).update(
